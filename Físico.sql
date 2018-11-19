@@ -20,26 +20,10 @@ USE `Comboios` ;
 CREATE TABLE IF NOT EXISTS `Comboios`.`Cliente` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NOT NULL,
-  `email` VARCHAR(30) NULL,
+  `email` VARCHAR(30) NOT NULL,
   `nif` INT(9) NOT NULL,
   `password` VARCHAR(18) NOT NULL,
   PRIMARY KEY (`id_cliente`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Comboios`.`TelemovelCliente`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`TelemovelCliente` (
-  `telemovel` INT NOT NULL,
-  `cliente_id` INT NOT NULL,
-  PRIMARY KEY (`telemovel`),
-  INDEX `fk_TelemovelCliente_Cliente1_idx` (`cliente_id` ASC),
-  CONSTRAINT `fk_TelemovelCliente_Cliente1`
-    FOREIGN KEY (`cliente_id`)
-    REFERENCES `Comboios`.`Cliente` (`id_cliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -70,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Viagem` (
   `data_partida` DATETIME NOT NULL,
   `data_chegada` DATETIME NOT NULL,
   `duracao` TIME GENERATED ALWAYS AS (data_chegada - data_partida) VIRTUAL,
+  `preco_base` FLOAT(5,2) NOT NULL,
   `comboio` INT NOT NULL,
   `origem` INT NOT NULL,
   `destino` INT NOT NULL,
@@ -102,6 +87,8 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Bilhete` (
   `id_bilhete` INT NOT NULL AUTO_INCREMENT,
   `preco` FLOAT(5,2) NOT NULL,
   `data_aquisicao` DATETIME NOT NULL,
+  `classe` CHAR(1) NOT NULL,
+  `numero` INT NOT NULL,
   `cliente` INT NOT NULL,
   `viagem` INT NOT NULL,
   PRIMARY KEY (`id_bilhete`),
@@ -124,37 +111,14 @@ ENGINE = InnoDB;
 -- Table `Comboios`.`Lugar`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Comboios`.`Lugar` (
-  `id_lugar` INT NOT NULL AUTO_INCREMENT,
   `classe` CHAR(1) NOT NULL,
   `numero` INT NOT NULL,
   `comboio` INT NOT NULL,
-  PRIMARY KEY (`id_lugar`),
   INDEX `fk_Lugar_Comboio1_idx` (`comboio` ASC),
+  PRIMARY KEY (`numero`, `comboio`, `classe`),
   CONSTRAINT `fk_Lugar_Comboio1`
     FOREIGN KEY (`comboio`)
     REFERENCES `Comboios`.`Comboio` (`id_comboio`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Comboios`.`LugarBilhete`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`LugarBilhete` (
-  `bilhete_id` INT NOT NULL,
-  `lugar_id` INT NOT NULL,
-  PRIMARY KEY (`bilhete_id`, `lugar_id`),
-  INDEX `fk_Bilhete_has_Lugar_Lugar1_idx` (`lugar_id` ASC),
-  INDEX `fk_Bilhete_has_Lugar_Bilhete1_idx` (`bilhete_id` ASC),
-  CONSTRAINT `fk_Bilhete_has_Lugar_Bilhete1`
-    FOREIGN KEY (`bilhete_id`)
-    REFERENCES `Comboios`.`Bilhete` (`id_bilhete`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Bilhete_has_Lugar_Lugar1`
-    FOREIGN KEY (`lugar_id`)
-    REFERENCES `Comboios`.`Lugar` (`id_lugar`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
