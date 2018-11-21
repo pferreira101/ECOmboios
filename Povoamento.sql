@@ -62,9 +62,9 @@ FROM viagem AS v INNER JOIN estacao AS eo
                  
                  
 -- BILHETE
-INSERT INTO bilhete(preco, data_aquisicao, classe, numero, cliente, viagem)
-VALUES (10.00*1.5, '2018-11-13 11:27:36', 'P', 2, 1, 1),
-	   (10.00, now(), 'E', 2, 2, 1);
+INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
+VALUES ('2018-11-05 11:27:36', 'P', 2, 1, 1),
+	   (now(), 'E', 2, 2, 1);
        
 SELECT * FROM bilhete;
 
