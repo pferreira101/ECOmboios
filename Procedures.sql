@@ -70,7 +70,7 @@ END $$
 CALL lugares_livres(1);
 
 
-
+-- Devia ser v.data_partida > NOW()
 DELIMITER $$
 CREATE PROCEDURE horario_partida_estacao(IN id_estacao INT)
 BEGIN
@@ -83,7 +83,7 @@ END $$
 CALL horario_partida_estacao(1);
 
 
-
+-- Devia ser v.data_chegada > NOW()
 DELIMITER $$
 CREATE PROCEDURE horario_chegada_estacao(IN id_estacao INT)
 BEGIN
