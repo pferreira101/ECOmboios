@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Cliente` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NOT NULL,
   `email` VARCHAR(30) NOT NULL,
-  `nif` INT(9) NOT NULL,
+  `nif` INT NOT NULL,
   `password` VARCHAR(18) NOT NULL,
   PRIMARY KEY (`id_cliente`))
 ENGINE = InnoDB;
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Bilhete` (
   `preco` FLOAT(5,2) NOT NULL,
   `data_aquisicao` DATETIME NOT NULL,
   `classe` CHAR(1) NOT NULL,
-  `numero` INT NOT NULL,
+  `numero` SMALLINT NOT NULL,
   `cliente` INT NOT NULL,
   `viagem` INT NOT NULL,
   PRIMARY KEY (`id_bilhete`),
@@ -112,7 +112,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Comboios`.`Lugar` (
   `classe` CHAR(1) NOT NULL,
-  `numero` INT NOT NULL,
+  `numero` SMALLINT NOT NULL,
   `comboio` INT NOT NULL,
   INDEX `fk_Lugar_Comboio1_idx` (`comboio` ASC),
   PRIMARY KEY (`numero`, `comboio`, `classe`),
