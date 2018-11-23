@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Viagem` (
   `id_viagem` INT NOT NULL AUTO_INCREMENT,
   `data_partida` DATETIME NOT NULL,
   `data_chegada` DATETIME NOT NULL,
-  `duracao` TIME GENERATED ALWAYS AS (data_chegada - data_partida) VIRTUAL,
+  `duracao` TIME NOT NULL,
   `preco_base` FLOAT(5,2) NOT NULL,
   `comboio` INT NOT NULL,
   `origem` INT NOT NULL,

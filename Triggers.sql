@@ -1,4 +1,17 @@
 
+
+DELIMITER $$
+CREATE TRIGGER duracao BEFORE INSERT ON viagem
+FOR EACH ROW
+BEGIN
+	SET new.duracao = TIMEDIFF(new.data_chegada, new.data_partida);
+END $$
+
+DROP TRIGGER duracao;
+
+
+
+
 DELIMITER $$
 CREATE TRIGGER preco_bilhete BEFORE INSERT ON bilhete
 FOR EACH ROW
