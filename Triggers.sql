@@ -7,7 +7,7 @@ BEGIN
 	SET new.duracao = TIMEDIFF(new.data_chegada, new.data_partida);
 END $$
 
-DROP TRIGGER duracao;
+-- DROP TRIGGER duracao;
 
 
 
@@ -35,4 +35,4 @@ BEGIN
     
 END $$
 
-DROP TRIGGER preco_bilhete;
+-- DROP TRIGGER preco_bilhete;
