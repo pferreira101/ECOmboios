@@ -110,12 +110,37 @@ FROM viagem AS v INNER JOIN estacao AS eo
                  
                  
 -- BILHETE
+DELIMITER $$ 
+CREATE FUNCTION lugar_livre(classe CHAR(1), numero SMALLINT, id_viagem INT)
+				RETURNS BOOLEAN DETERMINISTIC
+BEGIN
+	IF (SELECT b.id_bilhete 
+			FROM bilhete AS b
+            WHERE b.viagem = id_viagem AND b.classe = classe AND b.numero = numero) > 0
+	THEN RETURN 0;
+    ELSE RETURN 1;
+    END IF;
+END $$
+DROP FUNCTION lugar_livre;
+SELECT lugar_livre('P', 2, 1);
+
+
 DELIMITER $$
 CREATE PROCEDURE adiciona_bilhete(IN id_cliente INT, classe CHAR(1), numero INT, id_viagem INT) -- PROCEDURE OU FUNCTION ??????????????????????????????????????????
 BEGIN
-	INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
-	VALUES (now(), classe, numero, id_cliente, id_viagem);
+	DECLARE r INT;
+    
+	START TRANSACTION READ WRITE;
+		SET r = lugar_livre(classe, numero, id_viagem);
+        IF (r = 1)
+        THEN
+			INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
+			VALUES (now(), classe, numero, id_cliente, id_viagem);
+		END IF;
+    COMMIT;
 END $$
+
+CALL adiciona_bilhete(1, 'P', 2, 1);
 
 INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
 VALUES ('2018-11-15 10:02:34', 'P', 1, 1, 1),
