@@ -51,7 +51,8 @@ END $$
 
 CALL adiciona_lugares(1);
 
-SELECT * FROM lugar WHERE comboio = 1 ORDER BY classe;
+SELECT * FROM lugar;
+DELETE FROM comboio WHERE id_comboio = 1;
 
 -- VIAGEM
 DELIMITER $$

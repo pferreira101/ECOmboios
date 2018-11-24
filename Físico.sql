@@ -66,17 +66,17 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Viagem` (
     FOREIGN KEY (`comboio`)
     REFERENCES `Comboios`.`Comboio` (`id_comboio`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Viagem_Estacao1`
     FOREIGN KEY (`origem`)
     REFERENCES `Comboios`.`Estacao` (`id_estacao`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Viagem_Estacao2`
     FOREIGN KEY (`destino`)
     REFERENCES `Comboios`.`Estacao` (`id_estacao`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -98,12 +98,12 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Bilhete` (
     FOREIGN KEY (`cliente`)
     REFERENCES `Comboios`.`Cliente` (`id_cliente`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Bilhete_Viagem1`
     FOREIGN KEY (`viagem`)
     REFERENCES `Comboios`.`Viagem` (`id_viagem`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -119,8 +119,8 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Lugar` (
   CONSTRAINT `fk_Lugar_Comboio1`
     FOREIGN KEY (`comboio`)
     REFERENCES `Comboios`.`Comboio` (`id_comboio`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 

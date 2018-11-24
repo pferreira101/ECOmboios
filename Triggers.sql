@@ -30,7 +30,7 @@ BEGIN
 		SET preco = preco * 0.75;
 	END IF;
 	
-    -- Atualiza preco
+    -- Regista preco
     SET new.preco = preco;
     
 END $$
