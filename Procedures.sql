@@ -1,4 +1,4 @@
-
+USE ECOmboios
 
 -- CLIENTE
 
@@ -12,7 +12,8 @@ BEGIN
                             ON v.origem = eo.id_estacao
                             INNER JOIN estacao AS ed
                             ON v.destino = ed.id_estacao
-	WHERE b.cliente = id_cliente AND v.data_partida >= data_inicio AND v.data_chegada <= data_fim;
+	WHERE b.cliente = id_cliente AND v.data_partida >= data_inicio AND v.data_chegada <= data_fim
+    ORDER BY v.data_partida ASC;
 END $$
 
 CALL historico_viagens(1, '2018-11-01', '2018-12-31');
@@ -42,10 +43,11 @@ BEGIN
 	SELECT v.id_viagem AS 'ID', v.data_partida AS 'Data de Partida', v.data_chegada AS 'Data de Chegada', v.duracao AS 'Duração'
     FROM viagem AS v
 	WHERE v.data_partida >= data_inicio AND v.data_chegada <= data_fim
-		  AND v.origem = id_estacao_o AND v.destino = id_estacao_d;
+		  AND v.origem = id_estacao_o AND v.destino = id_estacao_d
+	ORDER BY v.data_partida ASC;
 END $$
 
-CALL viagens_between(1, 2, '2018-01-01 00:00:00', '2018-12-01 00:00:00'); 
+CALL viagens_between(1, 2, '2018-01-01 00:00:00', '2018-12-03 00:00:00'); 
 
 
 
@@ -80,7 +82,8 @@ BEGIN
                       INNER JOIN Estacao AS D
                       ON v.destino = d.id_estacao
 	WHERE e.id_estacao = id_estacao
-		AND v.data_partida > NOW();
+		AND v.data_partida > NOW()
+	ORDER BY v.data_partida ASC;
 END $$
 
 CALL horario_partida_estacao(1);
@@ -96,7 +99,8 @@ BEGIN
                       INNER JOIN Estacao AS D
                       ON v.destino = d.id_estacao
 	WHERE e.id_estacao = id_estacao
-		AND v.data_chegada > NOW();
+		AND v.data_chegada > NOW()
+	ORDER BY v.data_chegada ASC;
 END $$
 
 CALL horario_chegada_estacao(2);
@@ -116,7 +120,9 @@ BEGIN
                      ON v.origem = eo.id_estacao
                      INNER JOIN estacao AS ed
                      ON v.destino = ed.id_estacao
-	WHERE (v.data_partida >= data_inicio AND v.data_chegada <= data_fim AND c.id_comboio = id_comboio);
+	WHERE (v.data_partida >= data_inicio AND v.data_chegada <= data_fim AND c.id_comboio = id_comboio)
+    ORDER BY v.data_partida ASC;
+    
 END $$
 
 CALL viagens_comboio_between(1, '2018-01-01 00:00:00', '2018-12-01 00:00:00');
