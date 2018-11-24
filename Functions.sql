@@ -4,9 +4,8 @@ CREATE FUNCTION total_gasto(id_cliente INT, data_inicio DATETIME, data_fim DATET
 	   RETURNS FLOAT DETERMINISTIC
 BEGIN
 	RETURN (SELECT sum(b.preco)
-			FROM bilhete as b INNER JOIN viagem AS v
-							  ON b.viagem = v.id_viagem
-			WHERE b.cliente = id_cliente AND v.data_partida >= data_inicio AND v.data_chegada <= data_fim);
+			FROM bilhete as b 
+			WHERE b.cliente = id_cliente AND b.data_aquisicao >= data_inicio AND b.data_aquisicao <= data_fim);
 
 END $$
 
@@ -17,7 +16,7 @@ DELIMITER $$
 CREATE FUNCTION total_bilhetes_vendidos(d_inicio DATETIME, d_fim DATETIME)
 	   RETURNS FLOAT DETERMINISTIC
 BEGIN
-	RETURN (SELECT count(b)
+	RETURN (SELECT count(b.id_bilhete)
 			FROM bilhete as b
 			WHERE b.data_aquisicao >= d_inicio
 				  AND b.data_aquisicao <= d_fim);
