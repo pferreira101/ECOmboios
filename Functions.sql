@@ -1,15 +1,17 @@
 
 DELIMITER $$
-CREATE FUNCTION total_gasto(id_cliente INT)
+CREATE FUNCTION total_gasto(id_cliente INT, data_inicio DATETIME, data_fim DATETIME)
 	   RETURNS FLOAT DETERMINISTIC
 BEGIN
 	RETURN (SELECT sum(b.preco)
-			FROM bilhete as b
-			WHERE b.cliente = id_cliente);
+			FROM bilhete as b INNER JOIN viagem AS v
+							  ON b.viagem = v.id_viagem
+			WHERE b.cliente = id_cliente AND v.data_partida >= data_inicio AND v.data_chegada <= data_fim);
 
 END $$
 
-SELECT total_gasto(2);
+SELECT total_gasto(1, '2018-11-01', '2018-12-31');
+
 
 DELIMITER $$
 CREATE FUNCTION total_bilhetes_vendidos(d_inicio DATETIME, d_fim DATETIME)

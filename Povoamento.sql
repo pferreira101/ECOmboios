@@ -1,4 +1,4 @@
-USE comboios;
+USE ecomboios;
 
 -- CLIENTES
 INSERT INTO cliente(nome, email, nif, password)
@@ -50,9 +50,10 @@ BEGIN
 END $$
 
 CALL adiciona_lugares(1);
+CALL adiciona_lugares(2);
 
 SELECT * FROM lugar;
-DELETE FROM comboio WHERE id_comboio = 1;
+-- DELETE FROM comboio WHERE id_comboio = 1;
 
 -- VIAGEM
 DELIMITER $$
@@ -97,10 +98,10 @@ END $$
 
 
 CALL adiciona_workday('2018-12-01');
-DELETE FROM viagem WHERE id_viagem >= 1; 
-SELECT TIME(data_partida), TIME(data_chegada) FROM viagem WHERE origem = 3 AND destino = 1;
+-- DELETE FROM viagem WHERE id_viagem >= 1; 
+-- SELECT TIME(data_partida), TIME(data_chegada) FROM viagem WHERE origem = 3 AND destino = 1;
 
-SELECT v.data_partida, v.data_chegada, v.duracao, eo.nome AS origem, ed.nome AS destino
+SELECT v.id_viagem, v.data_partida, v.data_chegada, v.duracao, eo.nome AS origem, ed.nome AS destino
 FROM viagem AS v INNER JOIN estacao AS eo
 				 ON v.origem = eo.id_estacao
                  INNER JOIN estacao AS ed
@@ -110,13 +111,26 @@ FROM viagem AS v INNER JOIN estacao AS eo
                  
 -- BILHETE
 DELIMITER $$
-CREATE PROCEDURE adiciona_bilhete(IN id_cliente INT, classe INT, numero INT, id_viagem INT) -- PROCEDURE OU FUNCTION ??????????????????????????????????????????
+CREATE PROCEDURE adiciona_bilhete(IN id_cliente INT, classe CHAR(1), numero INT, id_viagem INT) -- PROCEDURE OU FUNCTION ??????????????????????????????????????????
 BEGIN
 	INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
 	VALUES (now(), classe, numero, id_cliente, id_viagem);
 END $$
+
+INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
+VALUES ('2018-11-15 10:02:34', 'P', 1, 1, 1),
+		('2018-11-15 10:02:34', 'P', 20, 1, 28),
+		('2018-11-16 21:10:54', 'E', 3, 2, 1),
+		('2018-11-19 13:20:34', 'E', 20, 3, 1),
+		('2018-11-21 15:43:21', 'E', 79, 4, 1),
+		('2018-11-21 20:20:34', 'P', 19, 5, 1),
+		('2018-11-25 23:56:12', 'E', 31, 6, 1),
+		('2018-11-26 14:20:37', 'P', 22, 7, 3),
+		('2018-11-26 15:24:14', 'P', 1, 8, 3);
        
 SELECT * FROM bilhete;
+
+
 
 SELECT c.nome, eo.nome AS origem, ed.nome AS destino, v.duracao, b.preco, b.classe, b.numero, b.id_bilhete
 FROM cliente AS c INNER JOIN bilhete AS b

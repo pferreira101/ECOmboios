@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema Comboios
+-- Schema ECOmboios
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema Comboios
+-- Schema ECOmboios
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `Comboios` DEFAULT CHARACTER SET utf8 ;
-USE `Comboios` ;
+CREATE SCHEMA IF NOT EXISTS `ECOmboios` DEFAULT CHARACTER SET utf8 ;
+USE `ECOmboios` ;
 
 -- -----------------------------------------------------
--- Table `Comboios`.`Cliente`
+-- Table `ECOmboios`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `ECOmboios`.`Cliente` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NOT NULL,
   `email` VARCHAR(30) NOT NULL,
@@ -28,18 +28,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Comboios`.`Comboio`
+-- Table `ECOmboios`.`Comboio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`Comboio` (
+CREATE TABLE IF NOT EXISTS `ECOmboios`.`Comboio` (
   `id_comboio` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id_comboio`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Comboios`.`Estacao`
+-- Table `ECOmboios`.`Estacao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`Estacao` (
+CREATE TABLE IF NOT EXISTS `ECOmboios`.`Estacao` (
   `id_estacao` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id_estacao`))
@@ -47,9 +47,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Comboios`.`Viagem`
+-- Table `ECOmboios`.`Viagem`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`Viagem` (
+CREATE TABLE IF NOT EXISTS `ECOmboios`.`Viagem` (
   `id_viagem` INT NOT NULL AUTO_INCREMENT,
   `data_partida` DATETIME NOT NULL,
   `data_chegada` DATETIME NOT NULL,
@@ -64,26 +64,26 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Viagem` (
   INDEX `fk_Viagem_Estacao2_idx` (`destino` ASC),
   CONSTRAINT `fk_Viagem_Comboio1`
     FOREIGN KEY (`comboio`)
-    REFERENCES `Comboios`.`Comboio` (`id_comboio`)
+    REFERENCES `ECOmboios`.`Comboio` (`id_comboio`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Viagem_Estacao1`
     FOREIGN KEY (`origem`)
-    REFERENCES `Comboios`.`Estacao` (`id_estacao`)
+    REFERENCES `ECOmboios`.`Estacao` (`id_estacao`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Viagem_Estacao2`
     FOREIGN KEY (`destino`)
-    REFERENCES `Comboios`.`Estacao` (`id_estacao`)
+    REFERENCES `ECOmboios`.`Estacao` (`id_estacao`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Comboios`.`Bilhete`
+-- Table `ECOmboios`.`Bilhete`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`Bilhete` (
+CREATE TABLE IF NOT EXISTS `ECOmboios`.`Bilhete` (
   `id_bilhete` INT NOT NULL AUTO_INCREMENT,
   `preco` FLOAT(5,2) NOT NULL,
   `data_aquisicao` DATETIME NOT NULL,
@@ -96,21 +96,21 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Bilhete` (
   INDEX `fk_Bilhete_Viagem1_idx` (`viagem` ASC),
   CONSTRAINT `fk_Bilhete_Cliente1`
     FOREIGN KEY (`cliente`)
-    REFERENCES `Comboios`.`Cliente` (`id_cliente`)
+    REFERENCES `ECOmboios`.`Cliente` (`id_cliente`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Bilhete_Viagem1`
     FOREIGN KEY (`viagem`)
-    REFERENCES `Comboios`.`Viagem` (`id_viagem`)
+    REFERENCES `ECOmboios`.`Viagem` (`id_viagem`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Comboios`.`Lugar`
+-- Table `ECOmboios`.`Lugar`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Comboios`.`Lugar` (
+CREATE TABLE IF NOT EXISTS `ECOmboios`.`Lugar` (
   `classe` CHAR(1) NOT NULL,
   `numero` SMALLINT NOT NULL,
   `comboio` INT NOT NULL,
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `Comboios`.`Lugar` (
   PRIMARY KEY (`numero`, `comboio`, `classe`),
   CONSTRAINT `fk_Lugar_Comboio1`
     FOREIGN KEY (`comboio`)
-    REFERENCES `Comboios`.`Comboio` (`id_comboio`)
+    REFERENCES `ECOmboios`.`Comboio` (`id_comboio`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
