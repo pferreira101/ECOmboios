@@ -1,31 +1,30 @@
 
-SELECT * FROM mysql.user;
-DESC mysql.user;
+SELECT * FROM mysql.utlizador;
+DESC mysql.utlizador;
 
 
 -- ADMIN
-CREATE USER 'admin'@'127.0.0.1' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON ecomboios.* TO 'admin'@'127.0.0.1';
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON ecomboios.* TO 'admin'@'localhost';
 
 
--- PROGRAMADOR
-CREATE USER 'programador'@'127.0.0.1' IDENTIFIED BY 'programador';
-GRANT SELECT (id_cliente, nome, email, nif) ON ecomboios.cliente TO 'programador'@'127.0.0.1';
-GRANT SELECT ON ecomboios.bilhete TO 'programador'@'127.0.0.1';
-GRANT SELECT, INSERT, UPDATE ON ecomboios.viagem TO 'programador'@'127.0.0.1';
-GRANT SELECT, INSERT, UPDATE ON ecomboios.estacao TO 'programador'@'127.0.0.1';
-GRANT SELECT, INSERT, UPDATE ON ecomboios.comboio TO 'programador'@'127.0.0.1';
-GRANT SELECT, INSERT, UPDATE ON ecomboios.lugar TO 'programador'@'127.0.0.1';
+-- GESTOR
+CREATE USER 'gestor'@'localhost' IDENTIFIED BY 'gestor';
+GRANT SELECT (id_cliente, nome, email, nif) ON ecomboios.cliente TO 'gestor'@'localhost';
+GRANT SELECT ON ecomboios.bilhete TO 'gestor'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON ecomboios.viagem TO 'gestor'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON ecomboios.estacao TO 'gestor'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON ecomboios.comboio TO 'gestor'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON ecomboios.lugar TO 'gestor'@'localhost';
 
 
--- USER
-CREATE USER 'user'@'127.0.0.1' IDENTIFIED BY 'user';
-GRANT INSERT ON ecomboios.cliente TO 'user'@'127.0.0.1';
-GRANT SELECT, INSERT ON ecomboios.bilhete TO 'user'@'127.0.0.1';
-GRANT SELECT ON ecomboios.viagem TO 'user'@'127.0.0.1';
-GRANT SELECT ON ecomboios.estacao TO 'user'@'127.0.0.1';
-GRANT SELECT ON ecomboios.lugar TO 'user'@'127.0.0.1';
--- E PARA OS COMBOIOS? O CLIENTE PODE VE-LOS?
+-- UTILIZADOR
+CREATE USER 'utlizador'@'localhost' IDENTIFIED BY 'utlizador';
+GRANT INSERT ON ecomboios.cliente TO 'utlizador'@'localhost';
+GRANT SELECT, INSERT ON ecomboios.bilhete TO 'utlizador'@'localhost';
+GRANT SELECT ON ecomboios.viagem TO 'utlizador'@'localhost';
+GRANT SELECT ON ecomboios.estacao TO 'utlizador'@'localhost';
+GRANT SELECT ON ecomboios.lugar TO 'utlizador'@'localhost';
 
 
 
