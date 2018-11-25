@@ -142,7 +142,7 @@ BEGIN
 	GROUP BY c.id_cliente;
 END $$
 
-CALL clientes_between_estacoes(1, 2, '2018-01-01 00:00:00', '2018-12-01 00:00:00');
+CALL clientes_between_estacoes(1, 2, '2018-11-30 00:00:00', '2018-12-02 00:00:00');
 
 
 DELIMITER $$
@@ -153,3 +153,5 @@ BEGIN
         WHERE b.viagem = id_viagem
 			AND b.cliente = c.id_cliente;
 END $$
+
+CALL clientes_na_viagem(1);
