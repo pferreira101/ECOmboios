@@ -9,7 +9,7 @@ BEGIN
 
 END $$
 
-SELECT total_gasto(1, '2018-11-01', '2018-12-31');
+-- SELECT total_gasto(1, '2018-11-01', '2018-12-31');
 
 
 DELIMITER $$
@@ -32,5 +32,19 @@ BEGIN
 			WHERE b.data_aquisicao >= d_inicio
 				  AND b.data_aquisicao <= d_fim);
 END $$
+
+
+DELIMITER $$ 
+CREATE FUNCTION lugar_livre(classe CHAR(1), numero SMALLINT, id_viagem INT)
+				RETURNS BOOLEAN DETERMINISTIC
+BEGIN
+	IF (SELECT b.id_bilhete 
+			FROM bilhete AS b
+            WHERE b.viagem = id_viagem AND b.classe = classe AND b.numero = numero) > 0
+	THEN RETURN 0;
+    ELSE RETURN 1;
+    END IF;
+END $$
+-- DROP FUNCTION lugar_livre;
 
 

@@ -16,7 +16,7 @@ BEGIN
     ORDER BY v.data_partida ASC;
 END $$
 
-CALL historico_viagens(1, '2018-11-01', '2018-12-31');
+-- CALL historico_viagens(1, '2018-11-01', '2018-12-31');
 
 
 
@@ -33,7 +33,7 @@ BEGIN
 	WHERE b.id_bilhete = id_bilhete;
 END $$
 
-CALL detalhes_viagem(2);
+-- CALL detalhes_viagem(2);
 
 
 
@@ -47,7 +47,7 @@ BEGIN
 	ORDER BY v.data_partida ASC;
 END $$
 
-CALL viagens_between(1, 2, '2018-01-01 00:00:00', '2018-12-03 00:00:00'); 
+-- CALL viagens_between(1, 2, '2018-01-01 00:00:00', '2018-12-03 00:00:00'); 
 
 
 
@@ -69,7 +69,7 @@ BEGIN
 		  AND v.id_viagem = id_viagem;
 END $$
 
-CALL lugares_livres(1);
+-- CALL lugares_livres(1);
 
 
 -- Devia ser v.data_partida > NOW()
@@ -86,7 +86,7 @@ BEGIN
 	ORDER BY v.data_partida ASC;
 END $$
 
-CALL horario_partida_estacao(1);
+-- CALL horario_partida_estacao(1);
 
 
 -- Devia ser v.data_chegada > NOW()
@@ -103,12 +103,92 @@ BEGIN
 	ORDER BY v.data_chegada ASC;
 END $$
 
-CALL horario_chegada_estacao(2);
+-- CALL horario_chegada_estacao(2);
+
+
 
 
 
 
 -- ADMIN
+DELIMITER $$
+CREATE PROCEDURE adiciona_lugares(IN id_comboio INT)
+BEGIN
+	DECLARE i INT DEFAULT 1;
+    
+    WHILE (i <= 50) DO
+		INSERT INTO lugar(classe, numero, comboio)
+		VALUES ('P', i, id_comboio), ('E', i, id_comboio);
+        SET i = i+1;
+	END WHILE;
+	
+    WHILE (i <= 200) DO
+		INSERT INTO lugar(classe, numero, comboio)
+		VALUES ('E', i, id_comboio);
+        SET i = i+1;
+	END WHILE;
+END $$
+
+
+DELIMITER $$
+CREATE PROCEDURE adiciona_workday(IN dia DATE)
+BEGIN
+	DECLARE i INT DEFAULT 7;
+    WHILE (i < 24) DO
+		INSERT INTO viagem(data_partida, data_chegada, preco_base, comboio, origem, destino)
+		VALUES -- BRAGA -> PORTO
+			   (date_add(dia, INTERVAL i HOUR), date_add(date_add(dia, INTERVAL i HOUR),  INTERVAL 20 MINUTE), 10.00, 1, 1, 2),
+			   (date_add(dia, INTERVAL i+1 HOUR), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 20 MINUTE), 10.00, 2, 1, 2),
+               -- PORTO -> BRAGA
+               (date_add(date_add(dia, INTERVAL i HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i HOUR),  INTERVAL 30 MINUTE), 10.00, 2, 2, 1),
+			   (date_add(date_add(dia, INTERVAL i+1 HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 30 MINUTE), 10.00, 1, 2, 1);
+		SET i = i + 2;
+    END WHILE;
+    
+    SET i = 7;
+    WHILE (i < 24) DO
+		INSERT INTO viagem(data_partida, data_chegada, preco_base, comboio, origem, destino)
+		VALUES -- PORTO -> LISBOA
+			   (date_add(dia, INTERVAL i HOUR), date_add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 25 MINUTE), 25.00, 3, 2, 3),
+			   (date_add(dia, INTERVAL i+2 HOUR), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 25 MINUTE), 25.00, 4, 2, 3),
+               -- LISBOA -> PORTO
+               (date_add(date_add(dia, INTERVAL i HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 55 MINUTE), 25.00, 4, 3, 2),
+			   (date_add(date_add(dia, INTERVAL i+2 HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 55 MINUTE), 25.00, 3, 3, 2);
+		SET i = i + 4;
+    END WHILE;
+    
+    SET i = 8;
+    WHILE (i < 24) DO
+		INSERT INTO viagem(data_partida, data_chegada, preco_base, comboio, origem, destino)
+		VALUES -- BRAGA -> LISBOA
+			   (date_add(dia, INTERVAL i HOUR), date_add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 45 MINUTE), 35.00, 5, 1, 3),
+			   (date_add(dia, INTERVAL i+2 HOUR), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 45 MINUTE), 35.00, 6, 1, 3),
+               -- LISBOA -> BRAGA
+               (date_add(date_add(dia, INTERVAL i HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 55 MINUTE), 35.00, 6, 3, 1),
+			   (date_add(date_add(dia, INTERVAL i+2 HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 55 MINUTE), 35.00, 5, 3, 1);
+		SET i = i + 4;
+    END WHILE;
+END $$
+
+
+
+DELIMITER $$
+CREATE PROCEDURE adiciona_bilhete(IN id_cliente INT, classe CHAR(1), numero INT, id_viagem INT)
+BEGIN
+	DECLARE r INT;
+    SET AUTOCOMMIT = OFF;
+    
+	START TRANSACTION READ WRITE;
+		SET r = lugar_livre(classe, numero, id_viagem);
+        IF (r = 1)
+        THEN
+			INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
+			VALUES (now(), classe, numero, id_cliente, id_viagem);
+		END IF;
+    COMMIT;
+END $$
+
+
 
 DELIMITER $$
 CREATE PROCEDURE viagens_comboio_between(IN id_comboio INT, data_inicio DATETIME, data_fim DATETIME)
@@ -125,7 +205,7 @@ BEGIN
     
 END $$
 
-CALL viagens_comboio_between(1, '2018-01-01 00:00:00', '2018-12-01 00:00:00');
+-- CALL viagens_comboio_between(1, '2018-01-01 00:00:00', '2018-12-01 00:00:00');
 
 
 
@@ -142,7 +222,7 @@ BEGIN
 	GROUP BY c.id_cliente;
 END $$
 
-CALL clientes_between_estacoes(1, 2, '2018-11-30 00:00:00', '2018-12-02 00:00:00');
+-- CALL clientes_between_estacoes(1, 2, '2018-11-30 00:00:00', '2018-12-02 00:00:00');
 
 
 DELIMITER $$
@@ -154,4 +234,12 @@ BEGIN
 			AND b.cliente = c.id_cliente;
 END $$
 
-CALL clientes_na_viagem(1);
+-- CALL clientes_na_viagem(1);
+
+
+DELIMITER $$
+CREATE PROCEDURE adiciona_cliente(IN nome VARCHAR(50), email VARCHAR(30), nif INT, password VARCHAR(18))
+BEGIN
+	INSERT INTO cliente(nome, email, nif, password)
+    VALUES (nome, email, nif, password);
+END $$

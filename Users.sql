@@ -1,14 +1,16 @@
 
-SELECT * FROM mysql.utlizador;
-DESC mysql.utlizador;
+-- SELECT * FROM mysql.user;
+-- DESC mysql.user;
 
 
 -- ADMIN
+-- DROP USER 'admin'@'localhost';
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
 GRANT ALL PRIVILEGES ON ecomboios.* TO 'admin'@'localhost';
 
 
 -- GESTOR
+-- DROP USER 'gestor'@'localhost';
 CREATE USER 'gestor'@'localhost' IDENTIFIED BY 'gestor';
 GRANT SELECT (id_cliente, nome, email, nif) ON ecomboios.cliente TO 'gestor'@'localhost';
 GRANT SELECT ON ecomboios.bilhete TO 'gestor'@'localhost';
@@ -19,12 +21,13 @@ GRANT SELECT, INSERT, UPDATE ON ecomboios.lugar TO 'gestor'@'localhost';
 
 
 -- UTILIZADOR
-CREATE USER 'utlizador'@'localhost' IDENTIFIED BY 'utlizador';
-GRANT INSERT ON ecomboios.cliente TO 'utlizador'@'localhost';
-GRANT SELECT, INSERT ON ecomboios.bilhete TO 'utlizador'@'localhost';
-GRANT SELECT ON ecomboios.viagem TO 'utlizador'@'localhost';
-GRANT SELECT ON ecomboios.estacao TO 'utlizador'@'localhost';
-GRANT SELECT ON ecomboios.lugar TO 'utlizador'@'localhost';
+-- DROP USER 'utilizador'@'localhost';
+CREATE USER 'utilizador'@'localhost' IDENTIFIED BY 'utilizador';
+GRANT INSERT ON ecomboios.cliente TO 'utilizador'@'localhost';
+GRANT SELECT, INSERT ON ecomboios.bilhete TO 'utilizador'@'localhost';
+GRANT SELECT ON ecomboios.viagem TO 'utilizador'@'localhost';
+GRANT SELECT ON ecomboios.estacao TO 'utilizador'@'localhost';
+GRANT SELECT ON ecomboios.lugar TO 'utilizador'@'localhost';
 
 
 

@@ -1,6 +1,8 @@
 USE ecomboios;
 
--- CLIENTES
+-- -----------------------------------------------------
+-- Tabela CLIENTE
+-- -----------------------------------------------------
 INSERT INTO cliente(nome, email, nif, password)
 VALUES ('Alberto Caeiro', 'albertinho1@gmail.com', 111111111, 'heteronimo'),
 	   ('Ricardo Reis', 'reidistotudo@hotmail.com', 222222222, 'souMedico'),
@@ -11,137 +13,62 @@ VALUES ('Alberto Caeiro', 'albertinho1@gmail.com', 111111111, 'heteronimo'),
        ('Diogo Sobral', 'diogosobral@hotmail.com', 182992102, 'zxcvb789'),
        ('Henrique Pereira', 'palmeira@gmail.com', 231983210, 'qazwsx123');
         
-SELECT * FROM cliente;
+-- SELECT * FROM cliente;
                   
                   
                   
--- ESTACAO
+-- -----------------------------------------------------
+-- Tabela ESTACAO
+-- -----------------------------------------------------
 INSERT INTO estacao(nome)
 VALUES ('Braga'), ('Porto'), ('Lisboa');
 
-SELECT * FROM estacao;
+-- SELECT * FROM estacao;
 
 
 
--- COMBOIO (6 comboios)
+-- -----------------------------------------------------
+-- Tabela COMBOIO
+-- -----------------------------------------------------
 INSERT INTO comboio
 VALUES (), (), (), (), (), ();
 
-SELECT * FROM comboio;
+-- SELECT * FROM comboio;
 
 
--- LUGAR
-DELIMITER $$
-CREATE PROCEDURE adiciona_lugares(IN id_comboio INT) -- PROCEDURE OU FUNCTION ???????????????????????????????
-BEGIN
-	DECLARE i INT DEFAULT 1;
-    
-    WHILE (i <= 50) DO
-		INSERT INTO lugar(classe, numero, comboio)
-		VALUES ('P', i, id_comboio), ('E', i, id_comboio);
-        SET i = i+1;
-	END WHILE;
-	
-    WHILE (i <= 200) DO
-		INSERT INTO lugar(classe, numero, comboio)
-		VALUES ('E', i, id_comboio);
-        SET i = i+1;
-	END WHILE;
-END $$
-
+-- -----------------------------------------------------
+-- Tabela LUGAR
+-- -----------------------------------------------------
 CALL adiciona_lugares(1);
 CALL adiciona_lugares(2);
+CALL adiciona_lugares(3);
+CALL adiciona_lugares(4);
+CALL adiciona_lugares(5);
+CALL adiciona_lugares(6);
 
-SELECT * FROM lugar;
--- DELETE FROM comboio WHERE id_comboio = 1;
-
--- VIAGEM
-DELIMITER $$
-CREATE PROCEDURE adiciona_workday(IN dia DATE) -- PROCEDURE OU FUNCTION ???????????????????????????????
-BEGIN
-	DECLARE i INT DEFAULT 7;
-    WHILE (i < 24) DO
-		INSERT INTO viagem(data_partida, data_chegada, preco_base, comboio, origem, destino)
-		VALUES -- BRAGA -> PORTO
-			   (date_add(dia, INTERVAL i HOUR), date_add(date_add(dia, INTERVAL i HOUR),  INTERVAL 20 MINUTE), 10.00, 1, 1, 2),
-			   (date_add(dia, INTERVAL i+1 HOUR), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 20 MINUTE), 10.00, 2, 1, 2),
-               -- PORTO -> BRAGA
-               (date_add(date_add(dia, INTERVAL i HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i HOUR),  INTERVAL 30 MINUTE), 10.00, 2, 2, 1),
-			   (date_add(date_add(dia, INTERVAL i+1 HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 30 MINUTE), 10.00, 1, 2, 1);
-		SET i = i + 2;
-    END WHILE;
-    
-    SET i = 7;
-    WHILE (i < 24) DO
-		INSERT INTO viagem(data_partida, data_chegada, preco_base, comboio, origem, destino)
-		VALUES -- PORTO -> LISBOA
-			   (date_add(dia, INTERVAL i HOUR), date_add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 25 MINUTE), 25.00, 3, 2, 3),
-			   (date_add(dia, INTERVAL i+2 HOUR), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 25 MINUTE), 25.00, 4, 2, 3),
-               -- LISBOA -> PORTO
-               (date_add(date_add(dia, INTERVAL i HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 55 MINUTE), 25.00, 4, 3, 2),
-			   (date_add(date_add(dia, INTERVAL i+2 HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 55 MINUTE), 25.00, 3, 3, 2);
-		SET i = i + 4;
-    END WHILE;
-    
-    SET i = 8;
-    WHILE (i < 24) DO
-		INSERT INTO viagem(data_partida, data_chegada, preco_base, comboio, origem, destino)
-		VALUES -- BRAGA -> LISBOA
-			   (date_add(dia, INTERVAL i HOUR), date_add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 45 MINUTE), 35.00, 5, 1, 3),
-			   (date_add(dia, INTERVAL i+2 HOUR), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 45 MINUTE), 35.00, 6, 1, 3),
-               -- LISBOA -> BRAGA
-               (date_add(date_add(dia, INTERVAL i HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+1 HOUR),  INTERVAL 55 MINUTE), 35.00, 6, 3, 1),
-			   (date_add(date_add(dia, INTERVAL i+2 HOUR), INTERVAL 10 MINUTE), date_Add(date_add(dia, INTERVAL i+3 HOUR),  INTERVAL 55 MINUTE), 35.00, 5, 3, 1);
-		SET i = i + 4;
-    END WHILE;
-END $$
+-- SELECT * FROM lugar;
 
 
+
+-- -----------------------------------------------------
+-- Tabela VIAGEM
+-- -----------------------------------------------------
 CALL adiciona_workday('2018-12-01');
--- DELETE FROM viagem WHERE id_viagem >= 1; 
--- SELECT TIME(data_partida), TIME(data_chegada) FROM viagem WHERE origem = 3 AND destino = 1;
 
+-- SELECT * FROM viagem;
+
+/*
 SELECT v.id_viagem, v.data_partida, v.data_chegada, v.duracao, eo.nome AS origem, ed.nome AS destino
 FROM viagem AS v INNER JOIN estacao AS eo
 				 ON v.origem = eo.id_estacao
                  INNER JOIN estacao AS ed
-                 ON v.destino = ed.id_estacao;
+                 ON v.destino = ed.id_estacao; */
                  
                  
                  
--- BILHETE
-DELIMITER $$ 
-CREATE FUNCTION lugar_livre(classe CHAR(1), numero SMALLINT, id_viagem INT)
-				RETURNS BOOLEAN DETERMINISTIC
-BEGIN
-	IF (SELECT b.id_bilhete 
-			FROM bilhete AS b
-            WHERE b.viagem = id_viagem AND b.classe = classe AND b.numero = numero) > 0
-	THEN RETURN 0;
-    ELSE RETURN 1;
-    END IF;
-END $$
-DROP FUNCTION lugar_livre;
-SELECT lugar_livre('P', 2, 1);
-
-
-DELIMITER $$
-CREATE PROCEDURE adiciona_bilhete(IN id_cliente INT, classe CHAR(1), numero INT, id_viagem INT) -- PROCEDURE OU FUNCTION ??????????????????????????????????????????
-BEGIN
-	DECLARE r INT;
-    
-	START TRANSACTION READ WRITE;
-		SET r = lugar_livre(classe, numero, id_viagem);
-        IF (r = 1)
-        THEN
-			INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
-			VALUES (now(), classe, numero, id_cliente, id_viagem);
-		END IF;
-    COMMIT;
-END $$
-
-CALL adiciona_bilhete(1, 'P', 2, 1);
-
+-- -----------------------------------------------------
+-- Tabela BILHETE
+-- -----------------------------------------------------
 INSERT INTO bilhete(data_aquisicao, classe, numero, cliente, viagem)
 VALUES ('2018-11-15 10:02:34', 'P', 1, 1, 1),
 		('2018-11-15 10:02:34', 'P', 20, 1, 28),
@@ -153,10 +80,10 @@ VALUES ('2018-11-15 10:02:34', 'P', 1, 1, 1),
 		('2018-11-26 14:20:37', 'P', 22, 7, 3),
 		('2018-11-26 15:24:14', 'P', 1, 8, 3);
        
-SELECT * FROM bilhete;
+-- SELECT * FROM bilhete;
 
 
-
+/*
 SELECT c.nome, eo.nome AS origem, ed.nome AS destino, v.duracao, b.preco, b.classe, b.numero, b.id_bilhete
 FROM cliente AS c INNER JOIN bilhete AS b
 				  ON c.id_cliente = b.cliente
@@ -165,6 +92,6 @@ FROM cliente AS c INNER JOIN bilhete AS b
 						INNER JOIN estacao AS eo
                         ON v.origem = eo.id_estacao
                         INNER JOIN estacao AS ed
-                        ON v.destino = ed.id_estacao;
+                        ON v.destino = ed.id_estacao; */
 				
 				
