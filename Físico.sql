@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS `ECOmboios`.`Cliente` (
   `email` VARCHAR(30) NOT NULL,
   `nif` INT NOT NULL,
   `password` VARCHAR(18) NOT NULL,
+  UNIQUE (`email`),
+  UNIQUE (`nif`),
   PRIMARY KEY (`id_cliente`))
 ENGINE = InnoDB;
 
@@ -42,6 +44,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `ECOmboios`.`Estacao` (
   `id_estacao` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(20) NOT NULL,
+  UNIQUE (`nome`),
   PRIMARY KEY (`id_estacao`))
 ENGINE = InnoDB;
 

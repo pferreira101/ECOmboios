@@ -23,7 +23,7 @@ GRANT SELECT, INSERT, UPDATE ON ecomboios.lugar TO 'gestor'@'localhost';
 -- UTILIZADOR
 -- DROP USER 'utilizador'@'localhost';
 CREATE USER 'utilizador'@'localhost' IDENTIFIED BY 'utilizador';
-GRANT INSERT ON ecomboios.cliente TO 'utilizador'@'localhost';
+GRANT INSERT, UPDATE ON ecomboios.cliente TO 'utilizador'@'localhost';
 GRANT SELECT, INSERT ON ecomboios.bilhete TO 'utilizador'@'localhost';
 GRANT SELECT ON ecomboios.viagem TO 'utilizador'@'localhost';
 GRANT SELECT ON ecomboios.estacao TO 'utilizador'@'localhost';
