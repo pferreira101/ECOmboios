@@ -1,12 +1,27 @@
-De acordo com o combinado, junto envio uma sugestão para a estrutura do vosso relatório relativo à segunda parte do trabalho prático da disciplina de Bases de Dados. A estrutura que vos sugiro incorpora os aspetos que eu gostaria de ver apresentados e explicados nesta parte do trabalho. Assim, tendo em consideração o âmbito do vosso trabalho prático, sugiro que no vosso relatório abordem o seguinte:
+De acordo com o combinado, junto envio uma sugestão para a estrutura do vosso relatório relativo à 
+segunda parte do trabalho prático da disciplina de Bases de Dados. 
+A estrutura que vos sugiro incorpora os aspetos que eu gostaria de ver apresentados e explicados nesta parte do trabalho. 
+Assim, tendo em consideração o âmbito do vosso trabalho prático, sugiro que no vosso relatório abordem o seguinte:
+
 - Justificação da utilização de um sistema NoSQL (no âmbito do vosso trabalho).
+
 - Identificação e descrição dos objetivos da base de dados, em termos de aplicações e de utilizadores.
+
 – Identificar e explicar que tipo de questões (necessidades) serão realizadas sobre o sistema de dados NoSQL.
+
 – Definir a estrutura base para o sistema de dados NoSQL que satisfaça os requisitos e as questões apresentadas anteriormente. 
+
 – Identificar os objetos de dados no sistema SQL que serão utilizados para alimentar o novos sistema.
+
 – Mapear o processo de migração de dados, descrevendo o processo de conversão dos vários objetos de dados.
+
 - Explicar o processo de migração de dados, explicando de forma detalhada as suas principais etapas - extração, transformação e carregamento.
+
 - Apresentar e descrever a implementação do processo de migração de dados.
+
 - Apresentar a forma como as questões identificadas anteriormente podem ser satisfeitas com o novo sistema, utilizando a linguagem de interrogação do sistema NoSQL.
+
 - Apresentar conclusões sobre o trabalho realizado, abordando de forma crítica as diversas ações realizadas.
-Este “relatório” deverá ser, depois, incluído como um novo capítulo no relatório que elaboraram durante a realização da primeira parte do vosso trabalho prático e enviado posteriormente como relatório final até ao dia 15 de Janeiro de 2019, de acordo com o estipulado para a entrega de relatórios na disciplinas.
+
+Este “relatório” deverá ser, depois, incluído como um novo capítulo no relatório que elaboraram durante a realização da primeira parte do vosso trabalho 
+prático e enviado posteriormente como relatório final até ao dia 15 de Janeiro de 2019, de acordo com o estipulado para a entrega de relatórios na disciplinas.
