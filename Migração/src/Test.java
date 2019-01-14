@@ -201,7 +201,7 @@ public class Test {
                                     .append("email", c.email)
                                     .append("nif", c.nif)
                                     .append("password", c.password)
-                                    .append("bilhete", bilhetes);
+                                    .append("bilhetes", bilhetes);
 
         coll.insert(doc);
     }
