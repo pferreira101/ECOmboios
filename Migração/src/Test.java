@@ -235,18 +235,27 @@ public class Test {
 
             List<Bilhete> bilhetes = new ArrayList<>();
 
+            /*
             PreparedStatement st_aux = con.prepareStatement("SELECT b.* " +
                                                             "FROM viagem as v INNER JOIN bilhete as b " +
                                                                              "ON b.viagem = v.id_viagem " +
-                                                            "WHERE v.id_viagem = ?;");
+                                                            "WHERE v.id_viagem = ?;");*/
+            PreparedStatement st_aux = con.prepareStatement("SELECT aux2.id_bilhete,aux2.preco,aux2.data_aquisicao,aux1.classe,aux1.numero,aux2.cliente FROM (SELECT v.id_viagem, l.classe,l.numero FROM viagem as v inner join lugar as l on v.comboio = l.comboio where v.id_viagem = ?) as aux1 LEFT JOIN (SELECT * FROM bilhete as b where b.viagem = ?) as aux2 on aux1.classe = aux2.classe and aux1.numero = aux2.numero;");
             st_aux.setInt(1, v.id);
+            st_aux.setInt(2, v.id);
 
             ResultSet rs_aux = st_aux.executeQuery();
             while(rs_aux.next()){
                 Bilhete b = new Bilhete();
                 b.id = rs_aux.getInt("id_bilhete");
                 b.preco = rs_aux.getFloat("preco");
-                b.aquisicao = rs_aux.getDate("data_aquisicao").toLocalDate();
+                Date aux = rs_aux.getDate("data_aquisicao");
+                if (aux == null){
+                    b.aquisicao = null;
+                }
+                else {
+                    b.aquisicao = ((java.sql.Date) aux).toLocalDate();
+                }
                 b.classe = rs_aux.getString("classe").charAt(0);
                 b.numero = rs_aux.getInt("numero");
                 b.cliente = rs_aux.getInt("cliente");
