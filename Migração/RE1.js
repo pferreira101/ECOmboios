@@ -1,57 +1,35 @@
 // (RE1)
 
- 
-db.getCollection("Cliente").find(
-    { 
+
+var id1 = 1.0;
+var data1 = "2018-12-01T00:00:00.000+0000";
+var data2 = "2018-12-10T00:00:00.000+0000";
+
+function get_results (result) {
+    print(tojson(result));
+}
+
+
+db.Cliente.find(
+    {
         "$and" : [
             {
-                "_id" : 1.0
-            }, 
+                "_id" : id1
+            },
             {
                 "bilhete.data_partida" : {
-                    "$gte" : ISODate("2018-12-01T00:00:00.000+0000")
+                    "$gte" : ISODate(data1)
                 }
-            }, 
+            },
             {
                 "bilhete.data_chegada" : {
-                    "$lte" : ISODate("2018-12-10T00:00:00.000+0000")
+                    "$lte" : ISODate(data2)
                 }
             }
         ]
-    }, 
-    { 
-        "bilhete.origem" : 1.0, 
+    },
+    {
+        "bilhete.origem" : 1.0,
         "bilhete.destino" : 1.0
     }
-);
-
-
-db.eval(
-    function(id, partida, chegada){
-        var x = db.getCollection("Cliente").find(
-                    { 
-                        "$and" : [
-                            {
-                                "_id" : id
-                            }, 
-                            {
-                                "bilhete.data_partida" : {
-                                    "$gte" : ISODate(partida)
-                                }
-                            }, 
-                            {
-                                "bilhete.data_chegada" : {
-                                    "$lte" : ISODate(chegada)
-                                }
-                            }
-                        ]
-                    }, 
-                    { 
-                        "bilhete.origem" : 1.0, 
-                        "bilhete.destino" : 1.0
-                    }
-                );
-        
-        return x;
-    }, 1.0, "2018-12-01T00:00:00.000+0000", "2018-12-10T00:00:00.000+0000"
-);
+).forEach(get_results);
