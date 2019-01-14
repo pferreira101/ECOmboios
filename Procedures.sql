@@ -16,7 +16,7 @@ BEGIN
     ORDER BY v.data_partida ASC;
 END $$
 
--- CALL historico_viagens(1, '2018-11-01', '2018-12-31');
+-- CALL historico_viagens(1, '2018-11-01', '2018-12-10');
 
 
 
