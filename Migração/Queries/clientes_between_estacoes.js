@@ -11,7 +11,7 @@ function get_results (result) {
 }
 
 
-db.getCollection("Cliente").find(
+db.Cliente.find(
     { 
         "$and" : [
             {
@@ -22,11 +22,7 @@ db.getCollection("Cliente").find(
             }, 
             {
                 "bilhetes.data_partida" : {
-                    "$gte" : ISODate(data_partida)
-                }
-            }, 
-            {
-                "bilhetes.data_chegada" : {
+                    "$gte" : ISODate(data_partida),
                     "$lte" : ISODate(data_chegada)
                 }
             }
