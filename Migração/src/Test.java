@@ -1,25 +1,14 @@
 import com.mongodb.BasicDBObject;
-import com.mongodb.BulkWriteOperation;
-import com.mongodb.BulkWriteResult;
-import com.mongodb.Cursor;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.ParallelScanOptions;
-import com.mongodb.ServerAddress;
-
-import java.lang.reflect.Array;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 class Cliente{
 
@@ -35,16 +24,16 @@ class Cliente{
 class Bilhete{
     int id;
     float preco;
-    LocalDate aquisicao;
+    LocalDateTime aquisicao;
     char classe;
     int numero;
     int cliente;
     int viagem;
-    LocalDate partida;
-    LocalDate chegada;
+    LocalDateTime partida;
+    LocalDateTime chegada;
     String origem;
     String destino;
-    LocalDate duracao;
+    String duracao;
 }
 
 class Comboio{
@@ -60,9 +49,9 @@ class Lugar{
 
 class Viagem{
     int id;
-    LocalDate partida;
-    LocalDate chegada;
-    LocalDate duracao;
+    LocalDateTime partida;
+    LocalDateTime chegada;
+    LocalTime duracao;
     float preco_base;
     int comboio;
     String origem_nome;
@@ -138,15 +127,15 @@ public class Test {
             c.password = rs.getString("password");
 
             PreparedStatement aux = con.prepareStatement("SELECT b.*, v.*, eo.nome AS 'origem_nome', ed.nome AS 'destino_nome' " +
-                    "FROM cliente AS c INNER JOIN bilhete AS b " +
-                    "ON c.id_cliente = b.cliente " +
-                    "                  INNER JOIN viagem as v " +
-                    "                  ON b.viagem = v.id_viagem " +
-                    "                  INNER JOIN estacao AS eo " +
-                    "ON v.origem = eo.id_estacao " +
-                    "                  INNER JOIN estacao AS ed " +
-                    "                  ON v.destino = ed.id_estacao " +
-                    "WHERE b.cliente = ?;");
+                                                         "FROM cliente AS c INNER JOIN bilhete AS b " +
+                                                                           "ON c.id_cliente = b.cliente " +
+                                                                           "INNER JOIN viagem as v " +
+                                                                           "ON b.viagem = v.id_viagem " +
+                                                                           "INNER JOIN estacao AS eo " +
+                                                                           "ON v.origem = eo.id_estacao " +
+                                                                           "INNER JOIN estacao AS ed " +
+                                                                           "ON v.destino = ed.id_estacao " +
+                                                         "WHERE b.cliente = ?;");
 
             aux.setInt(1, c.id);
 
@@ -155,13 +144,13 @@ public class Test {
                 Bilhete b = new Bilhete();
                 b.id = rs_aux.getInt("id_bilhete");
                 b.preco = (float) rs_aux.getDouble("preco");
-                b.aquisicao = rs_aux.getDate("data_aquisicao").toLocalDate();
+                b.aquisicao = rs_aux.getTimestamp("data_aquisicao").toLocalDateTime();
                 b.classe = rs_aux.getString("classe").charAt(0);
                 b.numero = rs_aux.getInt("numero");
                 b.viagem = rs_aux.getInt("viagem");
-                b.partida = rs_aux.getDate("data_partida").toLocalDate();
-                b.chegada = rs_aux.getDate("data_chegada").toLocalDate();
-                b.duracao = rs_aux.getDate("duracao").toLocalDate();
+                b.partida = rs_aux.getTimestamp("data_partida").toLocalDateTime();
+                b.chegada = rs_aux.getTimestamp("data_chegada").toLocalDateTime();
+                b.duracao = rs_aux.getTime("duracao").toString();
                 b.origem = rs_aux.getString("origem_nome");
                 b.destino = rs_aux.getString("destino_nome");
 
@@ -187,10 +176,10 @@ public class Test {
                                             .append("classe", b.classe)
                                             .append("numero", b.numero)
                                             .append("data_partida", b.partida)
-                    .append("data_chegada", b.chegada)
-                    .append("duracao", b.duracao)
-                    .append("origem", b.origem)
-                    .append("destino", b.destino);
+                                            .append("data_chegada", b.chegada)
+                                            .append("duracao", b.duracao)
+                                            .append("origem", b.origem)
+                                            .append("destino", b.destino);
 
 
             bilhetes.add(obj);
@@ -225,9 +214,9 @@ public class Test {
         while(rs.next()) {
             Viagem v = new Viagem();
             v.id = rs.getInt("id_viagem");
-            v.partida = rs.getDate("data_partida").toLocalDate();
-            v.chegada = rs.getDate("data_chegada").toLocalDate();
-            v.duracao = rs.getDate("duracao").toLocalDate();
+            v.partida = rs.getTimestamp("data_partida").toLocalDateTime();
+            v.chegada = rs.getTimestamp("data_chegada").toLocalDateTime();
+            v.duracao = rs.getTime("duracao").toLocalTime();
             v.preco_base = rs.getFloat("preco_base");
             v.comboio = rs.getInt("comboio");
             v.origem_nome = rs.getString(10);
@@ -249,12 +238,12 @@ public class Test {
                 Bilhete b = new Bilhete();
                 b.id = rs_aux.getInt("id_bilhete");
                 b.preco = rs_aux.getFloat("preco");
-                Date aux = rs_aux.getDate("data_aquisicao");
-                if (aux == null){
-                    b.aquisicao = null;
+
+                try{
+                    b.aquisicao =  rs_aux.getTimestamp("data_aquisicao").toLocalDateTime();
                 }
-                else {
-                    b.aquisicao = ((java.sql.Date) aux).toLocalDate();
+                catch (NullPointerException e){
+                    b.aquisicao = null;
                 }
                 b.classe = rs_aux.getString("classe").charAt(0);
                 b.numero = rs_aux.getInt("numero");

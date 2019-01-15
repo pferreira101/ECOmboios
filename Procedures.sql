@@ -33,7 +33,7 @@ BEGIN
 	WHERE b.id_bilhete = id_bilhete;
 END $$
 
--- CALL detalhes_viagem(2);
+-- CALL detalhes_viagem(1);
 
 
 
