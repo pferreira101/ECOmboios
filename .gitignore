@@ -5,3 +5,6 @@ tex/Relatório.log
 tex/Relatório.aux
 tex/Relatório.toc
 *.bak
+Migração/.idea/*
+Migração/Migração.iml
+Migração/.DS_Store
