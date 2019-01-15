@@ -1,7 +1,6 @@
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -36,17 +35,6 @@ class Bilhete{
     String duracao;
 }
 
-class Comboio{
-    int id;
-    List<Lugar> lugares = new ArrayList<>();
-}
-
-class Lugar{
-    int comboio;
-    char classe;
-    int numero;
-}
-
 class Viagem{
     int id;
     LocalDateTime partida;
@@ -59,56 +47,9 @@ class Viagem{
 }
 
 
-public class Test {
+public class Migration {
 
     static MongoClient mongoClient = new MongoClient("localhost", 27017);
-
-
-    private static void loadComboios() throws SQLException {
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ecomboios", "root", "12345");
-
-        PreparedStatement st;
-        st = con.prepareStatement("SELECT * FROM comboio;");
-
-        ResultSet rs = st.executeQuery();
-        while(rs.next()) {
-            Comboio c = new Comboio();
-            c.id = rs.getInt("id_comboio");
-
-            PreparedStatement aux = con.prepareStatement("SELECT DISTINCT l.* " +
-                                                         "FROM comboio AS c INNER JOIN lugar AS l " +
-                                                                            "ON ? = l.comboio;");
-            aux.setInt(1, c.id);
-
-            ResultSet rs_aux = aux.executeQuery();
-            while (rs_aux.next()){
-                Lugar l = new Lugar();
-                l.comboio = c.id;
-                l.numero = rs_aux.getInt("numero");
-                l.classe = rs_aux.getString("classe").charAt(0);
-                c.lugares.add(l);
-            }
-
-            mongoAddComboio(c);
-        }
-    }
-
-    private static void mongoAddComboio(Comboio c) {
-        DB db = mongoClient.getDB("ecomboios");
-        DBCollection coll = db.getCollection("Comboio");
-
-        List<BasicDBObject> lugares = new ArrayList<>();
-        for(Lugar l : c.lugares){
-            BasicDBObject b = new BasicDBObject("classe", l.classe)
-                                        .append("numero", l.numero);
-
-            lugares.add(b);
-        }
-        DBObject doc = new BasicDBObject("_id", c.id)
-                                      .append("lugar", lugares);
-
-        coll.insert(doc);
-    }
 
 
     private static void loadClientes() throws Exception {
@@ -195,9 +136,6 @@ public class Test {
         coll.insert(doc);
     }
 
-    private static void loadBilhetes() {
-
-    }
 
 
     private static void loadViagem() throws SQLException {
@@ -224,11 +162,6 @@ public class Test {
 
             List<Bilhete> bilhetes = new ArrayList<>();
 
-            /*
-            PreparedStatement st_aux = con.prepareStatement("SELECT b.* " +
-                                                            "FROM viagem as v INNER JOIN bilhete as b " +
-                                                                             "ON b.viagem = v.id_viagem " +
-                                                            "WHERE v.id_viagem = ?;");*/
             PreparedStatement st_aux = con.prepareStatement("SELECT aux2.id_bilhete,aux2.preco,aux2.data_aquisicao,aux1.classe,aux1.numero,aux2.cliente FROM (SELECT v.id_viagem, l.classe,l.numero FROM viagem as v inner join lugar as l on v.comboio = l.comboio where v.id_viagem = ?) as aux1 LEFT JOIN (SELECT * FROM bilhete as b where b.viagem = ?) as aux2 on aux1.classe = aux2.classe and aux1.numero = aux2.numero;");
             st_aux.setInt(1, v.id);
             st_aux.setInt(2, v.id);
@@ -238,7 +171,6 @@ public class Test {
                 Bilhete b = new Bilhete();
                 b.id = rs_aux.getInt("id_bilhete");
                 b.preco = rs_aux.getFloat("preco");
-
                 try{
                     b.aquisicao =  rs_aux.getTimestamp("data_aquisicao").toLocalDateTime();
                 }
@@ -291,39 +223,7 @@ public class Test {
 
 
     public static void main(String args[]) throws Exception {
-
-
         loadClientes();
-        loadBilhetes();
-        loadComboios();
         loadViagem();
-
-
-
-
-
-/*
-        List<BasicDBObject> array = new ArrayList<>();
-
-        BasicDBObject b = new BasicDBObject("id", c.id)
-                .append("preco", c.nome);
-
-        array.add(b);
-
-        //DBObject myDoc = coll.findOne();
-        //System.out.println(myDoc);
-
-        DBCursor cursor = coll.find();
-        try {
-            while(cursor.hasNext()) {
-                System.out.println(cursor.next());
-            }
-        } finally {
-            cursor.close();
-        }*/
     }
-
-
-
-
 }
