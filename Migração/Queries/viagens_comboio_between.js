@@ -10,11 +10,11 @@ function get_results (result) {
 }
 
 
-db.getCollection("Viagem").find(
+db.Viagem.find(
     { 
         "$and" : [
             {
-                "comboio" : 1.0
+                "comboio" : comboio
             }, 
             {
                 "data_partida" : {

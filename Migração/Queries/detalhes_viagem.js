@@ -7,7 +7,7 @@ function get_results (result) {
 }
 
 
-db.getCollection("Cliente").find(
+db.Cliente.find(
     { 
         "bilhetes._id" : id
     }, 

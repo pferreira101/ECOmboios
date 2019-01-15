@@ -1,7 +1,7 @@
 // (RE6)(2)
 
 var destino = "Porto";
-var data_chegada = "2019-12-12T00:00:00Z";
+var data_chegada = "2016-12-12T00:00:00Z";
 
 function get_results (result) {
     print(tojson(result));

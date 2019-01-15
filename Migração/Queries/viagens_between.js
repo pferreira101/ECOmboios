@@ -10,14 +10,18 @@ function get_results (result) {
 }
 
 
-db.getCollection("Viagem").find(
+db.Viagem.find(
     { 
         "$and" : [
             {
-                "data_partida" : ISODate(data_inicio)
+                "data_partida" : {
+                    "$gte" : ISODate(data_inicio)
+                }
             }, 
             {
-                "data_chegada" : ISODate(data_fim)
+                "data_chegada" : {
+                    "$lte" : ISODate(data_fim)
+                }
             }, 
             {
                 "origem" : origem
