@@ -12,19 +12,19 @@ db.Cliente.aggregate(
 		{
 			$match: {
 				"$and" : [
-		            {"bilhete.data_aquisicao":  {"$gte" : ISODate(data1)}},
-		            {"bilhete.data_aquisicao":  { "$lte": ISODate(data2)}},
+		            {"bilhetes.data_aquisicao":  {"$gte" : ISODate(data1)}},
+		            {"bilhetes.data_aquisicao":  { "$lte": ISODate(data2)}},
 		            {"_id" : id1}]
 			}
 		},
 		{
-			$unwind: "$bilhete"
+			$unwind: "$bilhetes"
 		},
 		{
 			$group: {
 				_id: "$nome",
 				Valor: {
-					$sum: "$bilhete.preco"
+					$sum: "$bilhetes.preco"
 				}
 			}
 		}

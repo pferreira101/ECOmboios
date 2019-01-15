@@ -17,19 +17,19 @@ db.Cliente.find(
                 "_id" : id1
             },
             {
-                "bilhete.data_partida" : {
+                "bilhetes.data_partida" : {
                     "$gte" : ISODate(data1)
                 }
             },
             {
-                "bilhete.data_chegada" : {
+                "bilhetes.data_chegada" : {
                     "$lte" : ISODate(data2)
                 }
             }
         ]
     },
     {
-        "bilhete.origem" : 1.0,
-        "bilhete.destino" : 1.0
+        "bilhetes.origem" : 1.0,
+        "bilhetes.destino" : 1.0
     }
 ).forEach(get_results);
