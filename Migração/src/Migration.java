@@ -222,9 +222,7 @@ public class Migration {
                                       .append("origem", v.origem_nome)
                                       .append("destino", v.destino_nome)
                                       .append("bilhetes", bilhetes_obj);
-
-
-
+        
         coll.insert(obj);
     }
 
