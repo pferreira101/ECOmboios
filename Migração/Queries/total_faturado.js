@@ -11,14 +11,14 @@ function get_results (result) {
 db.Cliente.aggregate(
 	[
 		{
-			$match: {
-				"$and" : [
-		            {"bilhetes.data_aquisicao":  {"$gte" : ISODate(data_inicio)}},
-		            {"bilhetes.data_aquisicao":  { "$lte": ISODate(data_fim)}}]
-			}
+			$unwind: "$bilhetes"
 		},
 		{
-			$unwind: "$bilhetes"
+			$match: {
+				"$and" : [
+					{"bilhetes.data_aquisicao":  {"$gte" : ISODate(data_inicio)}},
+					{"bilhetes.data_aquisicao":  { "$lte": ISODate(data_fim)}}]
+			}
 		},
 		{
 			$group: {
