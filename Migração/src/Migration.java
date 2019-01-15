@@ -39,7 +39,7 @@ class Viagem{
     int id;
     LocalDateTime partida;
     LocalDateTime chegada;
-    LocalTime duracao;
+    String duracao;
     float preco_base;
     int comboio;
     String origem_nome;
@@ -146,7 +146,7 @@ public class Migration {
             v.id = rs.getInt("id_viagem");
             v.partida = rs.getTimestamp("data_partida").toLocalDateTime();
             v.chegada = rs.getTimestamp("data_chegada").toLocalDateTime();
-            v.duracao = rs.getTime("duracao").toLocalTime();
+            v.duracao = rs.getTime("duracao").toString();
             v.preco_base = rs.getFloat("preco_base");
             v.comboio = rs.getInt("comboio");
             v.origem_nome = rs.getString(10);
@@ -154,7 +154,15 @@ public class Migration {
 
             List<Bilhete> bilhetes = new ArrayList<>();
 
-            PreparedStatement st_aux = con.prepareStatement("SELECT aux2.id_bilhete,aux2.preco,aux2.data_aquisicao,aux1.classe,aux1.numero,aux2.cliente FROM (SELECT v.id_viagem, l.classe,l.numero FROM viagem as v inner join lugar as l on v.comboio = l.comboio where v.id_viagem = ?) as aux1 LEFT JOIN (SELECT * FROM bilhete as b where b.viagem = ?) as aux2 on aux1.classe = aux2.classe and aux1.numero = aux2.numero;");
+            PreparedStatement st_aux = con.prepareStatement("SELECT aux2.id_bilhete, aux2.preco, aux2.data_aquisicao, aux1.classe, aux1.numero, aux2.cliente \n" +
+                                                            "FROM (SELECT v.id_viagem, l.classe, l.numero " +
+                                                                  "FROM viagem AS v INNER JOIN lugar AS l  " +
+                                                                                    "ON v.comboio = l.comboio  " +
+                                                                  "WHERE v.id_viagem = ?) AS aux1 " +
+                                                                                        "LEFT JOIN (SELECT * " +
+                                                                                                   "FROM bilhete AS b " +
+                                                                                                   "WHERE b.viagem = ?) AS aux2 " +
+                                                                                        "ON aux1.classe = aux2.classe AND aux1.numero = aux2.numero;");
             st_aux.setInt(1, v.id);
             st_aux.setInt(2, v.id);
 
@@ -205,9 +213,7 @@ public class Migration {
                                       .append("origem", v.origem_nome)
                                       .append("destino", v.destino_nome)
                                       .append("bilhetes", bilhetes_obj);
-
-
-
+        
         coll.insert(obj);
     }
 
