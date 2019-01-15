@@ -122,7 +122,6 @@ public class Migration {
                                             .append("origem", b.origem)
                                             .append("destino", b.destino);
 
-
             bilhetes.add(obj);
         }
 
