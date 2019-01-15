@@ -54,10 +54,8 @@ public class Migration {
 
     private static void loadClientes() throws Exception {
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ecomboios", "root", "12345");
-
         PreparedStatement st;
         st = con.prepareStatement("SELECT * FROM cliente;");
-
         ResultSet rs = st.executeQuery();
         while(rs.next()) {
             Cliente c = new Cliente();
@@ -77,7 +75,6 @@ public class Migration {
                                                                            "INNER JOIN estacao AS ed " +
                                                                            "ON v.destino = ed.id_estacao " +
                                                          "WHERE b.cliente = ?;");
-
             aux.setInt(1, c.id);
 
             ResultSet rs_aux = aux.executeQuery();
@@ -97,11 +94,8 @@ public class Migration {
 
                 c.bilhetes.add(b);
             }
-
             mongoAddCliente(c);
-
         }
-
         con.close();
     }
 
@@ -139,7 +133,6 @@ public class Migration {
 
     private static void loadViagem() throws SQLException {
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost/ecomboios", "root", "12345");
-
         PreparedStatement st;
         st = con.prepareStatement("SELECT * " +
                                   "FROM viagem AS v INNER JOIN estacao AS eo " +
@@ -182,8 +175,6 @@ public class Migration {
 
                 bilhetes.add(b);
             }
-
-
             mongoAddViagem(v, bilhetes);
         }
     }
